@@ -37,4 +37,5 @@ jspm_packages/
 /dist/
 !/.eslintrc.json
 /build/
+/public/runtime-config.json
 !/project.json

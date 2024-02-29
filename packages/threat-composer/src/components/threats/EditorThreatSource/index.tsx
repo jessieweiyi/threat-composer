@@ -19,7 +19,6 @@ import ColumnLayout from '@cloudscape-design/components/column-layout';
 import { InputProps } from '@cloudscape-design/components/input';
 import TextContent from '@cloudscape-design/components/text-content';
 import { FC, useCallback, useEffect, useRef, forwardRef } from 'react';
-import { useThreatsContext } from '../../../contexts/ThreatsContext/context';
 import { TemplateThreatStatementSchema } from '../../../customTypes';
 import Input from '../../generic/Input';
 import EditorLayout from '../EditorLayout';
@@ -28,10 +27,13 @@ import ExampleList from '../ExampleList';
 import { EditorProps } from '../ThreatStatementEditor/types';
 
 const EditorThreatSource: FC<EditorProps> = forwardRef<InputProps.Ref, EditorProps>(({
-  statement, setStatement, fieldData,
+  statement,
+  setStatement,
+  fieldData,
+  threatStatementExamples,
+  perFieldExamples,
+  previousInputs,
 }, ref) => {
-  const { perFieldExamples, previousInputs } = useThreatsContext();
-
   const valueRef = useRef<string | undefined>(statement.threatSource);
   useEffect(() => {
     valueRef.current = statement.threatSource?.trim();
@@ -66,11 +68,15 @@ const EditorThreatSource: FC<EditorProps> = forwardRef<InputProps.Ref, EditorPro
     </div>
     <ColumnLayout columns={previousInputs.threat_source.length > 0 ? 2 : 1}>
       {perFieldExamples.threat_source.length > 0 &&
-        <ExampleList examples={perFieldExamples.threat_source} onSelect={handleChange} showSearch={false}></ExampleList>}
+        <ExampleList
+          examples={perFieldExamples.threat_source}
+          fullExamples={threatStatementExamples}
+          onSelect={handleChange}
+          showSearch={false} />}
       {previousInputs.threat_source.length > 0 && <TextContent>
         <span>From previous input</span>
         <ul>
-          {previousInputs.threat_source.map((threatSource, index) => (<li key={index}><Button variant='link' onClick={() => handleChange(threatSource)}>{threatSource}</Button></li>))}
+          {previousInputs.threat_source.map((threatSource: string, index: number) => (<li key={index}><Button variant='link' onClick={() => handleChange(threatSource)}>{threatSource}</Button></li>))}
         </ul>
       </TextContent>}
     </ColumnLayout>

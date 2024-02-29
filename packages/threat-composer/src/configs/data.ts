@@ -13,14 +13,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  ******************************************************************************************************************** */
-import { PerFieldExamplesType } from '../../../contexts/RecommendationsContext/types';
-import { TemplateThreatStatement, ThreatFieldData } from '../../../customTypes';
+export const SCHEMA_VERSION = 1.0;
 
-export interface EditorProps {
-  statement: TemplateThreatStatement;
-  setStatement: React.Dispatch<React.SetStateAction<TemplateThreatStatement | null>>;
-  fieldData: ThreatFieldData;
-  threatStatementExamples: TemplateThreatStatement[];
-  perFieldExamples: PerFieldExamplesType;
-  previousInputs: PerFieldExamplesType;
-}
+export const PLACEHOLDER_EXCHANGE_DATA = {
+  schema: SCHEMA_VERSION,
+};
+
+export const PLACEHOLDER_EXCHANGE_DATA_FOR_WORKSPACE = {
+  id: '',
+  name: '',
+};

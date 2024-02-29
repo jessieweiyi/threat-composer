@@ -23,8 +23,7 @@ import Toggle from '@cloudscape-design/components/toggle';
 import * as awsui from '@cloudscape-design/design-tokens';
 import { css } from '@emotion/react';
 import { useCallback, useMemo, useState } from 'react';
-import { useThreatsContext } from '../../../contexts/ThreatsContext/context';
-import { PerFieldExample } from '../../../customTypes';
+import { PerFieldExample, TemplateThreatStatement } from '../../../customTypes';
 import renderArrayField from '../../../utils/renderArrayField';
 import shuffle from '../../../utils/shuffle';
 
@@ -40,6 +39,7 @@ const styles = {
 
 export interface ExampleListProps<T> {
   examples: T[];
+  fullExamples: TemplateThreatStatement[];
   onSelect: (example: string) => void;
   showSearch?: boolean;
 }
@@ -47,11 +47,11 @@ export interface ExampleListProps<T> {
 const ExampleList = <T extends string | PerFieldExample | string[]>({
   examples,
   onSelect,
+  fullExamples,
   showSearch = true,
 }: ExampleListProps<T>) => {
   const [showMoreExamples, setShowMoreExamples] = useState(false);
   const [showFullExample, setShowFullExample] = useState(false);
-  const { threatStatementExamples } = useThreatsContext();
   const [filterText, setFilterText] = useState('');
 
   const randomDislayList = useMemo(() => {
@@ -99,7 +99,7 @@ const ExampleList = <T extends string | PerFieldExample | string[]>({
 
     if (typeof perFieldExamples.fromId !== 'undefined' && typeof perFieldExamples.example !== 'undefined') {
       if (showFullExample) {
-        const fullExample = threatStatementExamples[perFieldExamples.fromId].statement;
+        const fullExample = fullExamples[perFieldExamples.fromId].statement;
 
         if (fullExample) {
           const index = fullExample.indexOf(perFieldExamples.example);
@@ -119,7 +119,7 @@ const ExampleList = <T extends string | PerFieldExample | string[]>({
     }
 
     return undefined;
-  }, [showFullExample, threatStatementExamples]);
+  }, [showFullExample, fullExamples]);
 
   return (<TextContent>
     <SpaceBetween direction='vertical' size='m'>

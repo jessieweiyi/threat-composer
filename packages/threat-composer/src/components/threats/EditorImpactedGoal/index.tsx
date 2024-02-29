@@ -18,7 +18,6 @@ import { AutosuggestProps } from '@cloudscape-design/components/autosuggest';
 import { BaseKeyDetail, CancelableEventHandler, NonCancelableEventHandler } from '@cloudscape-design/components/internal/events';
 import TokenGroup, { TokenGroupProps } from '@cloudscape-design/components/token-group';
 import { FC, useCallback, useState, forwardRef } from 'react';
-import { useThreatsContext } from '../../../contexts/ThreatsContext/context';
 import { ThreatStatementImpactedGoalItem } from '../../../customTypes';
 import Autosuggest from '../../generic/Autosuggest';
 import EditorLayout from '../EditorLayout';
@@ -29,10 +28,10 @@ const EditorImpactedGoal: FC<EditorProps> = forwardRef<AutosuggestProps.Ref, Edi
   statement,
   setStatement,
   fieldData,
+  threatStatementExamples,
+  perFieldExamples,
 }, _ref) => {
   const [value, setValue] = useState<string>('');
-  const { perFieldExamples } = useThreatsContext();
-
   const handleAddImpactedGoal = useCallback((impactedGoal: string) => {
     setStatement(prevStatement => prevStatement && ({
       ...prevStatement,
@@ -96,7 +95,12 @@ const EditorImpactedGoal: FC<EditorProps> = forwardRef<AutosuggestProps.Ref, Edi
       }))}
     />
     {perFieldExamples.impacted_goal.length > 0 &&
-      <ExampleList examples={perFieldExamples.impacted_goal} onSelect={handleExampleClicked} showSearch={false}></ExampleList>}
+      <ExampleList
+        examples={perFieldExamples.impacted_goal}
+        fullExamples={threatStatementExamples}
+        onSelect={handleExampleClicked}
+        showSearch={false}
+      />}
   </EditorLayout>);
 });
 

@@ -13,22 +13,37 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  ******************************************************************************************************************** */
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import ThreatStatementEditor from '../../components/threats/ThreatStatementEditor';
+import { useThreatsContext } from '../../contexts';
+import RecommendationsContext from '../../contexts/RecommendationsContext';
 import WorkspaceContextAggregator from '../../contexts/WorkspaceContextAggregator';
 
 export interface ThreatEditorProps {
   workspaceId?: string;
 }
 
+const ThreatEditorInner = () => {
+  const { setEditingStatement } = useThreatsContext();
+  useEffect(() => {
+    setEditingStatement({
+      id: 'test',
+      numericId: -1,
+    });
+  }, []);
+  return <ThreatStatementEditor />;
+};
+
 const ThreatEditor: FC<ThreatEditorProps> = ({ workspaceId }) => {
-  return (<WorkspaceContextAggregator
-    workspaceId={workspaceId || null}
-    composerMode='Full'
-    requiredGlobalSetupContext
-  >
-    <ThreatStatementEditor />
-  </WorkspaceContextAggregator>);
+  return (<RecommendationsContext>
+    <WorkspaceContextAggregator
+      workspaceId={workspaceId || null}
+      composerMode='Full'
+      requiredGlobalSetupContext
+    >
+      <ThreatEditorInner />
+    </WorkspaceContextAggregator>
+  </RecommendationsContext>);
 };
 
 export default ThreatEditor;

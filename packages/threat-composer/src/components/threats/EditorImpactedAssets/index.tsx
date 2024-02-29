@@ -18,7 +18,6 @@ import { AutosuggestProps } from '@cloudscape-design/components/autosuggest';
 import { BaseKeyDetail, CancelableEventHandler, NonCancelableEventHandler } from '@cloudscape-design/components/internal/events';
 import TokenGroup, { TokenGroupProps } from '@cloudscape-design/components/token-group';
 import { FC, useCallback, useState, forwardRef } from 'react';
-import { useThreatsContext } from '../../../contexts/ThreatsContext/context';
 import { ThreatStatementImpactedAssetItem } from '../../../customTypes';
 import Autosuggest from '../../generic/Autosuggest';
 import EditorLayout from '../EditorLayout';
@@ -26,9 +25,13 @@ import ExampleList from '../ExampleList';
 import { EditorProps } from '../ThreatStatementEditor/types';
 
 const EditorImpactedAssets: FC<EditorProps> = forwardRef<AutosuggestProps.Ref, EditorProps>(({
-  statement, setStatement, fieldData,
+  statement,
+  setStatement,
+  fieldData,
+  threatStatementExamples,
+  perFieldExamples,
+  previousInputs,
 }, _ref) => {
-  const { perFieldExamples, previousInputs } = useThreatsContext();
   const [value, setValue] = useState<string>('');
   const handleAddAsset = useCallback((asset: string) => {
     setStatement(prevStatement => prevStatement && ({
@@ -70,7 +73,7 @@ const EditorImpactedAssets: FC<EditorProps> = forwardRef<AutosuggestProps.Ref, E
       onChange={({ detail }) => setValue(detail.value)}
       onSelect={handleSelect}
       value={value}
-      options={previousInputs.impacted_assets.map(asset => ({
+      options={previousInputs.impacted_assets.map((asset: string) => ({
         value: asset,
       }))}
       enteredTextLabel={enteredValue => `Use: "${enteredValue}"`}
@@ -88,7 +91,12 @@ const EditorImpactedAssets: FC<EditorProps> = forwardRef<AutosuggestProps.Ref, E
       }))}
     />
     {perFieldExamples.impacted_assets.length > 0 &&
-      <ExampleList examples={perFieldExamples.impacted_assets} onSelect={handleAddAsset} showSearch={false}></ExampleList>}
+      <ExampleList
+        examples={perFieldExamples.impacted_assets}
+        fullExamples={threatStatementExamples}
+        onSelect={handleAddAsset}
+        showSearch={false}
+      />}
   </EditorLayout>);
 });
 

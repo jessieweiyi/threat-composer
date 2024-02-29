@@ -17,7 +17,6 @@
 import Button from '@cloudscape-design/components/button';
 import { TextareaProps } from '@cloudscape-design/components/textarea';
 import { FC, useCallback, forwardRef, useRef, RefObject, useImperativeHandle } from 'react';
-import { useThreatsContext } from '../../../contexts/ThreatsContext';
 import { TemplateThreatStatementSchema } from '../../../customTypes';
 import Textarea from '../../generic/Textarea';
 import EditorLayout from '../EditorLayout';
@@ -26,10 +25,13 @@ import ExampleList from '../ExampleList';
 import { EditorProps } from '../ThreatStatementEditor/types';
 
 const EditorThreatAction: FC<EditorProps> = forwardRef<TextareaProps.Ref, EditorProps>(({
-  statement, setStatement, fieldData,
+  statement,
+  setStatement,
+  fieldData,
+  threatStatementExamples,
+  perFieldExamples,
 }, ref) => {
   const inputRef = useRef<TextareaProps.Ref>();
-  const { perFieldExamples } = useThreatsContext();
 
   useImperativeHandle(ref, () => {
     return {
@@ -74,7 +76,10 @@ const EditorThreatAction: FC<EditorProps> = forwardRef<TextareaProps.Ref, Editor
       </div>}
     </div>
     {perFieldExamples.threat_action.length > 0 &&
-      <ExampleList examples={perFieldExamples.threat_action} onSelect={handleSelect}></ExampleList>}
+      <ExampleList
+        examples={perFieldExamples.threat_action}
+        fullExamples={threatStatementExamples}
+        onSelect={handleSelect}/>}
   </EditorLayout>);
 });
 

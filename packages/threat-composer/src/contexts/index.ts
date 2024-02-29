@@ -39,3 +39,5 @@ export { default as MitigationPacksContext } from './MitigationPacksContext';
 export { useMitigationPacksContext } from './MitigationPacksContext/context';
 export { default as WorkspaceContextAggregator } from './WorkspaceContextAggregator';
 export { default as ContextAggregator } from './ContextAggregator';
+export { default as RuntimeConfigContextProvider } from './RuntimeConfigContext';
+export { useRuntimeConfigContext } from './RuntimeConfigContext/context';

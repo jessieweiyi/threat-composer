@@ -28,12 +28,12 @@ import { useAssumptionsContext } from '../../../contexts/AssumptionsContext/cont
 import { useGlobalSetupContext } from '../../../contexts/GlobalSetupContext/context';
 import { useMitigationLinksContext } from '../../../contexts/MitigationLinksContext/context';
 import { useMitigationsContext } from '../../../contexts/MitigationsContext/context';
+import useThreatExamples from '../../../contexts/RecommendationsContext/hooks/useThreatExamples';
 import { useThreatsContext } from '../../../contexts/ThreatsContext/context';
 import { useWorkspacesContext } from '../../../contexts/WorkspacesContext/context';
 import { TemplateThreatStatement } from '../../../customTypes';
 import { ThreatFieldTypes } from '../../../customTypes/threatFieldTypes';
 import threatFieldData from '../../../data/threatFieldData';
-import threatStatementExamples from '../../../data/threatStatementExamples.json';
 import threatStatementFormat from '../../../data/threatStatementFormat';
 import useEditMetadata from '../../../hooks/useEditMetadata';
 import getRecommendedEditor from '../../../utils/getRecommandedEditor';
@@ -91,6 +91,12 @@ const ThreatStatementEditorInner: FC<{ editingStatement: TemplateThreatStatement
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [displayStatement, setDisplayStatement] = useState<ReactNode[] | undefined>([]);
   const [customTemplateEditorVisible, setCustomTemplateEditorVisible] = useState(false);
+  const {
+    threatStatementExamples,
+    isLoading: isThreatExamplesLoading,
+    perFieldExamples,
+    previousInputs,
+  } = useThreatExamples();
 
   const { addAssumptionLinks, getLinkedAssumptionLinks, removeAssumptionLinks } = useAssumptionLinksContext();
   const { addMitigationLinks, getLinkedMitigationLinks, removeMitigationLinks } = useMitigationLinksContext();
@@ -214,8 +220,6 @@ const ThreatStatementEditorInner: FC<{ editingStatement: TemplateThreatStatement
   const handleExampleClicked = useCallback((statement: TemplateThreatStatement) => {
     setEditingStatement({
       ...statement,
-      tags: [],
-      metadata: [],
       displayOrder: -1,
       numericId: -1,
       id: uuidV4(),
@@ -231,8 +235,6 @@ const ThreatStatementEditorInner: FC<{ editingStatement: TemplateThreatStatement
     const example = threatStatementExamples[randomNumber] as TemplateThreatStatement;
     const statement = {
       ...example,
-      tags: [],
-      metadata: [],
       displayOrder: -1,
       numericId: -1,
       id: uuidV4(),
@@ -242,7 +244,7 @@ const ThreatStatementEditorInner: FC<{ editingStatement: TemplateThreatStatement
     const recommendedEditor = getRecommendedEditor(statement);
     recommendedEditor && setEditor(recommendedEditor);
     scrollToTop();
-  }, []);
+  }, [threatStatementExamples]);
 
   const saveButtonText = useMemo(() => {
     if (!currentWorkspace && workspaceList.length === 0) {
@@ -322,6 +324,7 @@ const ThreatStatementEditorInner: FC<{ editingStatement: TemplateThreatStatement
           statement={editingStatement}
           currentEditor={editor}
           suggestions={suggestions}
+          showGiveExample={threatStatementExamples.length > 0}
           onGiveExampleClick={handleGiveExampleClicked}
           setCustomTemplateEditorVisible={setCustomTemplateEditorVisible}
         />
@@ -335,6 +338,9 @@ const ThreatStatementEditorInner: FC<{ editingStatement: TemplateThreatStatement
                 statement={editingStatement}
                 setStatement={setEditingStatement}
                 fieldData={threatFieldData[editor]}
+                threatStatementExamples={threatStatementExamples}
+                perFieldExamples={perFieldExamples}
+                previousInputs={previousInputs}
               />
             </div>
             <Metrics statement={editingStatement} onClick={(token) => setEditor(token as ThreatFieldTypes)} />
@@ -365,7 +371,13 @@ const ThreatStatementEditorInner: FC<{ editingStatement: TemplateThreatStatement
             />
           </div>}
         </SpaceBetween>}
-        <FullExamples ref={fullExamplesRef} onClick={handleExampleClicked} />
+        <FullExamples
+          ref={fullExamplesRef}
+          initialExpanded={!editor}
+          isLoading={isThreatExamplesLoading}
+          onClick={handleExampleClicked}
+          threatStatementExamples={threatStatementExamples}
+        />
       </SpaceBetween>
       {customTemplateEditorVisible && <CustomTemplate
         statement={editingStatement}

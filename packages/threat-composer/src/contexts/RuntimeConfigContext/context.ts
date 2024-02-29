@@ -13,14 +13,14 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  ******************************************************************************************************************** */
-import { PerFieldExamplesType } from '../../../contexts/RecommendationsContext/types';
-import { TemplateThreatStatement, ThreatFieldData } from '../../../customTypes';
+import { createContext, useContext } from 'react';
 
-export interface EditorProps {
-  statement: TemplateThreatStatement;
-  setStatement: React.Dispatch<React.SetStateAction<TemplateThreatStatement | null>>;
-  fieldData: ThreatFieldData;
-  threatStatementExamples: TemplateThreatStatement[];
-  perFieldExamples: PerFieldExamplesType;
-  previousInputs: PerFieldExamplesType;
+export interface RuntimeConfigContextApi {
+  readonly apiRecommendations?: string;
 }
+
+export const RuntimeConfigContext = createContext<RuntimeConfigContextApi | undefined>(undefined);
+
+export const useRuntimeConfigContext = () => useContext(RuntimeConfigContext);
+
+

@@ -13,14 +13,23 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  ******************************************************************************************************************** */
-import { PerFieldExamplesType } from '../../../contexts/RecommendationsContext/types';
-import { TemplateThreatStatement, ThreatFieldData } from '../../../customTypes';
+export interface RecommendationsContextProviderProps {}
+import { PerFieldExample } from '../../customTypes';
 
-export interface EditorProps {
-  statement: TemplateThreatStatement;
-  setStatement: React.Dispatch<React.SetStateAction<TemplateThreatStatement | null>>;
-  fieldData: ThreatFieldData;
-  threatStatementExamples: TemplateThreatStatement[];
-  perFieldExamples: PerFieldExamplesType;
-  previousInputs: PerFieldExamplesType;
+export type PerFieldExamplesType = {
+  threat_source: string[];
+  prerequisites: PerFieldExample[];
+  threat_action: PerFieldExample[];
+  threat_impact: PerFieldExample[];
+  impacted_goal: string[][];
+  impacted_assets: string[];
 }
+
+export const DEFAULT_PER_FIELD_EXAMPLES = {
+  threat_source: [],
+  prerequisites: [],
+  threat_action: [],
+  threat_impact: [],
+  impacted_goal: [],
+  impacted_assets: [],
+};

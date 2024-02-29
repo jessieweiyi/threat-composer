@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  ******************************************************************************************************************** */
-import { ThemeProvider, Mode } from '@aws/threat-composer';
+import { ThemeProvider, Mode, PlaceholderComponent, RuntimeConfigContextProvider } from '@aws/threat-composer';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
@@ -23,6 +23,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import isMemoryRouterUsed from './utils/isMemoryRouterUsed';
 
 const Router = isMemoryRouterUsed() ? MemoryRouter : BrowserRouter;
+const RuntimeConfigProvider = process.env.REACT_APP_RUNTIME_CONFIG_ENABLED === 'true' ? RuntimeConfigContextProvider : PlaceholderComponent;
 
 const initialThemeString = (document.querySelector('meta[name="dark-mode"]') as HTMLMetaElement)?.content;
 
@@ -33,9 +34,11 @@ const initialTheme = initialThemeString ?
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={initialTheme}>
-      <Router>
-        <App />
-      </Router>
+      <RuntimeConfigProvider>
+        <Router>
+          <App />
+        </Router>
+      </RuntimeConfigProvider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root'),

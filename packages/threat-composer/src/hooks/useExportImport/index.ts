@@ -14,6 +14,7 @@
   limitations under the License.
  ******************************************************************************************************************** */
 import { useCallback } from 'react';
+import { SCHEMA_VERSION } from '../../configs/data';
 import { useWorkspacesContext } from '../../contexts';
 import { useApplicationInfoContext } from '../../contexts/ApplicationContext/context';
 import { useArchitectureInfoContext } from '../../contexts/ArchitectureContext/context';
@@ -31,17 +32,6 @@ import getExportFileName from '../../utils/getExportFileName';
 import recalculateThreatData from '../../utils/recalculateThreatData';
 import sanitizeHtml from '../../utils/sanitizeHtml';
 import validateData from '../../utils/validateData';
-
-const SCHEMA_VERSION = 1.0;
-
-export const PLACEHOLDER_EXCHANGE_DATA = {
-  schema: SCHEMA_VERSION,
-};
-
-export const PLACEHOLDER_EXCHANGE_DATA_FOR_WORKSPACE = {
-  id: '',
-  name: '',
-};
 
 const useImportExport = () => {
   const { composerMode } = useGlobalSetupContext();

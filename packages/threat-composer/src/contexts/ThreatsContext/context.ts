@@ -14,36 +14,15 @@
   limitations under the License.
  ******************************************************************************************************************** */
 import { useContext, createContext } from 'react';
-import { PerFieldExample, TemplateThreatStatement, ThreatStatementListFilter } from '../../customTypes';
-import threatStatementExamplesData from '../../data/threatStatementExamples.json';
+import { TemplateThreatStatement, ThreatStatementListFilter } from '../../customTypes';
+
 export type View = 'list' | 'editor';
-
-export type PerFieldExamplesType = {
-  threat_source: string[];
-  prerequisites: PerFieldExample[];
-  threat_action: PerFieldExample[];
-  threat_impact: PerFieldExample[];
-  impacted_goal: string[][];
-  impacted_assets: string[];
-}
-
-export const DEFAULT_PER_FIELD_EXAMPLES = {
-  threat_source: [],
-  prerequisites: [],
-  threat_action: [],
-  threat_impact: [],
-  impacted_goal: [],
-  impacted_assets: [],
-};
 
 export interface ThreatsContextApi {
   view: View;
   editingStatement: TemplateThreatStatement | null;
   statementList: TemplateThreatStatement[];
   setStatementList: (statements: TemplateThreatStatement[]) => void;
-  threatStatementExamples: TemplateThreatStatement[];
-  perFieldExamples: PerFieldExamplesType;
-  previousInputs: PerFieldExamplesType;
   setView: React.Dispatch<React.SetStateAction<View>>;
   setEditingStatement: React.Dispatch<React.SetStateAction<TemplateThreatStatement | null>>;
   addStatement: (idToCopy?: string) => void;
@@ -61,9 +40,6 @@ const initialState: ThreatsContextApi = {
   editingStatement: null,
   statementList: [],
   setStatementList: () => { },
-  threatStatementExamples: threatStatementExamplesData,
-  perFieldExamples: DEFAULT_PER_FIELD_EXAMPLES,
-  previousInputs: DEFAULT_PER_FIELD_EXAMPLES,
   setView: () => { },
   setEditingStatement: () => { },
   addStatement: () => { },

@@ -13,14 +13,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  ******************************************************************************************************************** */
-import { PerFieldExamplesType } from '../../../contexts/RecommendationsContext/types';
-import { TemplateThreatStatement, ThreatFieldData } from '../../../customTypes';
+import { createContext, useContext } from 'react';
+import { PLACEHOLDER_EXCHANGE_DATA } from '../../configs/data';
+import { DataExchangeFormat } from '../../customTypes';
 
-export interface EditorProps {
-  statement: TemplateThreatStatement;
-  setStatement: React.Dispatch<React.SetStateAction<TemplateThreatStatement | null>>;
-  fieldData: ThreatFieldData;
-  threatStatementExamples: TemplateThreatStatement[];
-  perFieldExamples: PerFieldExamplesType;
-  previousInputs: PerFieldExamplesType;
+export interface RecommendationsContextApi {
+  getThreatRecommendations: (data: DataExchangeFormat) => Promise<DataExchangeFormat>;
 }
+
+const initialState: RecommendationsContextApi = {
+  getThreatRecommendations: () => Promise.resolve(PLACEHOLDER_EXCHANGE_DATA),
+};
+
+export const RecommendationsContext = createContext<RecommendationsContextApi>(initialState);
+
+export const useRecommendationsContext = () => useContext(RecommendationsContext);

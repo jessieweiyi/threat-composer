@@ -13,14 +13,16 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  ******************************************************************************************************************** */
+/** @jsxImportSource @emotion/react */
 import Box from '@cloudscape-design/components/box';
 import Button from '@cloudscape-design/components/button';
 import ExpandableSection from '@cloudscape-design/components/expandable-section';
 import PropertyFilter, { PropertyFilterProps } from '@cloudscape-design/components/property-filter';
 import SpaceBetween from '@cloudscape-design/components/space-between';
+import Spinner from '@cloudscape-design/components/spinner';
 import TextContent from '@cloudscape-design/components/text-content';
+import { css } from '@emotion/react';
 import { FC, useState, useMemo, useCallback, useImperativeHandle, forwardRef } from 'react';
-import { useThreatsContext } from '../../../contexts/ThreatsContext/context';
 import { TemplateThreatStatement } from '../../../customTypes';
 import STRIDE from '../../../data/stride';
 import intersectArrays from '../../../utils/intersectArrays';
@@ -28,6 +30,9 @@ import shuffle from '../../../utils/shuffle';
 
 export interface FullExamplesProps {
   onClick: (example: TemplateThreatStatement) => void;
+  threatStatementExamples: TemplateThreatStatement[];
+  isLoading: boolean;
+  initialExpanded?: boolean;
 }
 
 const parseToken = (statements: TemplateThreatStatement[], token: PropertyFilterProps.Token) => {
@@ -59,11 +64,20 @@ const parseToken = (statements: TemplateThreatStatement[], token: PropertyFilter
   return result;
 };
 
+const styles = {
+  spinner: css({
+    width: '100%',
+    textAlign: 'center',
+  }),
+};
+
 const FullExamples: FC<FullExamplesProps & { ref?: React.ForwardedRef<any> }> = forwardRef(({
   onClick,
+  threatStatementExamples,
+  isLoading,
+  initialExpanded = false,
 }, ref) => {
-  const { threatStatementExamples } = useThreatsContext();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(initialExpanded);
   const [query, setQuery] = useState<PropertyFilterProps.Query>({
     tokens: [],
     operation: 'and',
@@ -140,7 +154,9 @@ const FullExamples: FC<FullExamplesProps & { ref?: React.ForwardedRef<any> }> = 
       expanded={expanded}
       onChange={({ detail }) => setExpanded(detail.expanded)}
     >
-      <Box padding='m'>
+      {isLoading ? (<Box padding='m'><div css={styles.spinner}>
+        <Spinner size='large'/>
+      </div></Box>) : (<Box padding='m'>
         <SpaceBetween direction='vertical' size='m'>
           <PropertyFilter
             onChange={({ detail }) => setQuery(detail)}
@@ -194,7 +210,7 @@ const FullExamples: FC<FullExamplesProps & { ref?: React.ForwardedRef<any> }> = 
             </ul>
           </TextContent>
         </SpaceBetween>
-      </Box>
+      </Box>)}
     </ExpandableSection>
   );
 });

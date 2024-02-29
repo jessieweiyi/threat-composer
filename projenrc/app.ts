@@ -55,6 +55,8 @@ class ThreatComposerReactAppProject extends ReactTypeScriptProject {
     this.postCompileTask.exec(`cp -r ../threat-composer/storybook.out/ ./build/storybook/`);
 
     this.package.addField("browserslist", browsersList);
+
+    this.gitignore.addPatterns('/public/runtime-config.json');
   }
 }
 

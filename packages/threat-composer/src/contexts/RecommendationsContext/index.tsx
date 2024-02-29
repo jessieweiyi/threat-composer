@@ -13,14 +13,26 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  ******************************************************************************************************************** */
-import { PerFieldExamplesType } from '../../../contexts/RecommendationsContext/types';
-import { TemplateThreatStatement, ThreatFieldData } from '../../../customTypes';
+import { FC, PropsWithChildren } from 'react';
+import ThreatExamplesApiContextProvider from './components/ApiContextProvider';
+import ThreatExamplesLocalContextProvider from './components/LocalContextProvider';
+import { RecommendationsContextProviderProps } from './types';
+import { useRuntimeConfigContext } from '../RuntimeConfigContext/context';
 
-export interface EditorProps {
-  statement: TemplateThreatStatement;
-  setStatement: React.Dispatch<React.SetStateAction<TemplateThreatStatement | null>>;
-  fieldData: ThreatFieldData;
-  threatStatementExamples: TemplateThreatStatement[];
-  perFieldExamples: PerFieldExamplesType;
-  previousInputs: PerFieldExamplesType;
-}
+const ThreatExamplesContextProvider: FC<PropsWithChildren<RecommendationsContextProviderProps>> = ({
+  children,
+}) => {
+  const config = useRuntimeConfigContext();
+
+  if (config?.apiRecommendations) {
+    return (<ThreatExamplesApiContextProvider>
+      {children}
+    </ThreatExamplesApiContextProvider>);
+  }
+
+  return (<ThreatExamplesLocalContextProvider>
+    {children}
+  </ThreatExamplesLocalContextProvider>);
+};
+
+export default ThreatExamplesContextProvider;

@@ -14,8 +14,9 @@
   limitations under the License.
  ******************************************************************************************************************** */
 import { useCallback, FC, PropsWithChildren, useEffect } from 'react';
+import { PLACEHOLDER_EXCHANGE_DATA } from '../../../configs/data';
 import { useWorkspacesContext } from '../../../contexts';
-import useExportImport, { PLACEHOLDER_EXCHANGE_DATA } from '../../../hooks/useExportImport';
+import useExportImport from '../../../hooks/useExportImport';
 import useRemoveData from '../../../hooks/useRemoveData';
 
 /**

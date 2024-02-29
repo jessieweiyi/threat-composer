@@ -20,7 +20,6 @@ import { TemplateThreatStatement } from '../../../../customTypes';
 import removeLocalStorageKey from '../../../../utils/removeLocalStorageKey';
 import { useGlobalSetupContext } from '../../../GlobalSetupContext/context';
 import { ThreatsContext } from '../../context';
-import useThreatExamples from '../../hooks/useThreatExamples';
 import useThreats from '../../hooks/useThreats';
 import { ThreatsContextProviderProps } from '../../types';
 
@@ -54,12 +53,6 @@ const ThreatsContextProviderInner: FC<PropsWithChildren<ThreatsContextProviderPr
   });
 
   const { composerMode, hasVisitBefore } = useGlobalSetupContext();
-
-  const {
-    threatStatementExamples,
-    perFieldExamples,
-    previousInputs,
-  } = useThreatExamples(statementList);
 
   const {
     view,
@@ -106,9 +99,6 @@ const ThreatsContextProviderInner: FC<PropsWithChildren<ThreatsContextProviderPr
     editingStatement,
     statementList,
     setStatementList,
-    threatStatementExamples: threatStatementExamples as TemplateThreatStatement[],
-    perFieldExamples,
-    previousInputs,
     setView,
     setEditingStatement,
     addStatement: handleAddStatement,

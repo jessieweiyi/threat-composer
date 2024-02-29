@@ -13,14 +13,27 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  ******************************************************************************************************************** */
-import { PerFieldExamplesType } from '../../../contexts/RecommendationsContext/types';
-import { TemplateThreatStatement, ThreatFieldData } from '../../../customTypes';
+import { FC, PropsWithChildren, useCallback } from 'react';
+import { PLACEHOLDER_EXCHANGE_DATA } from '../../../../configs/data';
+import threatStatementExamplesData from '../../../../data/threatStatementExamples.json';
+import { RecommendationsContext } from '../../context';
+import { RecommendationsContextProviderProps } from '../../types';
 
-export interface EditorProps {
-  statement: TemplateThreatStatement;
-  setStatement: React.Dispatch<React.SetStateAction<TemplateThreatStatement | null>>;
-  fieldData: ThreatFieldData;
-  threatStatementExamples: TemplateThreatStatement[];
-  perFieldExamples: PerFieldExamplesType;
-  previousInputs: PerFieldExamplesType;
-}
+const RecommendationsLocalContextProvider: FC<PropsWithChildren<RecommendationsContextProviderProps>> = ({
+  children,
+}) => {
+  const getThreatRecommendations = useCallback(async () => {
+    return {
+      ...PLACEHOLDER_EXCHANGE_DATA,
+      threats: threatStatementExamplesData,
+    };
+  }, []);
+
+  return (<RecommendationsContext.Provider value={{
+    getThreatRecommendations,
+  }}>
+    {children}
+  </RecommendationsContext.Provider>);
+};
+
+export default RecommendationsLocalContextProvider;

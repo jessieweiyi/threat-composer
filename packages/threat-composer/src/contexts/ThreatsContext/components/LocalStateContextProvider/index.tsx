@@ -18,7 +18,6 @@ import { TemplateThreatStatement } from '../../../../customTypes';
 import { useGlobalSetupContext } from '../../../GlobalSetupContext/context';
 import { LocalStateContextProviderBaseProps } from '../../../types';
 import { ThreatsContext } from '../../context';
-import useThreatExamples from '../../hooks/useThreatExamples';
 import useThreats from '../../hooks/useThreats';
 import { ThreatsContextProviderProps } from '../../types';
 
@@ -35,12 +34,6 @@ const ThreatsContextProvider: FC<PropsWithChildren<ThreatsContextProviderProps &
     setStatementList] = useState<TemplateThreatStatement[]>(initialValue || []);
 
   const { composerMode } = useGlobalSetupContext();
-
-  const {
-    threatStatementExamples,
-    perFieldExamples,
-    previousInputs,
-  } = useThreatExamples(statementList);
 
   const {
     view,
@@ -72,9 +65,6 @@ const ThreatsContextProvider: FC<PropsWithChildren<ThreatsContextProviderProps &
     editingStatement,
     statementList,
     setStatementList,
-    threatStatementExamples: threatStatementExamples as TemplateThreatStatement[],
-    perFieldExamples,
-    previousInputs,
     setView,
     setEditingStatement,
     addStatement: handleAddStatement,

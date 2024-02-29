@@ -43,6 +43,7 @@ export interface FieldSelectorProps {
   setEditor: (type: ThreatFieldTypes) => void;
   statement: TemplateThreatStatement;
   suggestions?: string[];
+  showGiveExample: boolean;
   onGiveExampleClick: () => void;
   setCustomTemplateEditorVisible: (visible: boolean) => void;
   onStartOver?: () => void;
@@ -53,6 +54,7 @@ const styles = {
     lineHeight: '2.5',
   }),
 };
+
 const FieldSelector: FC<FieldSelectorProps> = ({
   composerMode,
   onStartOver,
@@ -60,6 +62,7 @@ const FieldSelector: FC<FieldSelectorProps> = ({
   currentEditor,
   statement,
   suggestions,
+  showGiveExample,
   onGiveExampleClick,
   setCustomTemplateEditorVisible,
 }) => {
@@ -153,7 +156,7 @@ const FieldSelector: FC<FieldSelectorProps> = ({
       info={composerMode === 'Full' ? undefined : <Button variant='icon' iconName='status-info' onClick={showInfoModal} />}
       actions={<SpaceBetween direction='horizontal' size='s'>
         {composerMode === 'EditorOnly' && <Button onClick={onStartOver}>Start over</Button>}
-        <Button onClick={onGiveExampleClick}>Give me a random example</Button>
+        <Button onClick={onGiveExampleClick} disabled={!showGiveExample}>Give me a random example</Button>
         <ButtonDropdown items={[
           { id: 'customTemplate', text: 'Custom Template' },
         ]}
