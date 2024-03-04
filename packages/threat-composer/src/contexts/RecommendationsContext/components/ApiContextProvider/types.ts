@@ -52,16 +52,16 @@ export interface TempResponse {
   results: TempResponseResources;
 }
 
-export const covertResponse = (response: TempResponse) => {
+export const convertResponse = (response: TempResponse) => {
   const threats: TemplateThreatStatement[] = [];
   Object.keys(response.results).forEach(res => {
     const resValue = response.results[res];
     Object.keys(resValue).forEach(th => {
       const value = resValue[th];
       threats.push({
+        ...convertStatementToGrammer(th),
         id: uuidv4(),
         numericId: -1,
-        prerequisites: th,
         tags: [res],
         metadata: value.STRIDE ? [
           {
@@ -76,5 +76,24 @@ export const covertResponse = (response: TempResponse) => {
   return {
     ...PLACEHOLDER_EXCHANGE_DATA,
     threats,
+  };
+};
+
+const REGEX_TOKEN_MATCH = /\[(.+?)\]/g;
+
+export const convertStatementToGrammer = (statement: string): Partial<TemplateThreatStatement> => {
+  const matches = statement.match(REGEX_TOKEN_MATCH);
+  if (matches?.length === 5) {
+    return {
+      threatSource: matches[0].slice(1, matches[0].length - 1),
+      prerequisites: matches[1].slice(1, matches[1].length - 1),
+      threatAction: matches[2].slice(1, matches[2].length - 1),
+      threatImpact: matches[3].slice(1, matches[3].length - 1),
+      impactedAssets: [matches[4].slice(1, matches[4].length - 1)],
+    };
+  }
+
+  return {
+    prerequisites: statement,
   };
 };

@@ -14,7 +14,7 @@
   limitations under the License.
  ******************************************************************************************************************** */
 import { FC, PropsWithChildren, useCallback } from 'react';
-import { TempRequest, TempResponse, covertResponse } from './types';
+import { TempRequest, TempResponse, convertResponse } from './types';
 import { PLACEHOLDER_EXCHANGE_DATA } from '../../../../configs/data';
 import { DataExchangeFormat } from '../../../../customTypes';
 import { useRuntimeConfigContext } from '../../../RuntimeConfigContext';
@@ -40,7 +40,7 @@ const RecommendationsApiContextProvider: FC<PropsWithChildren<RecommendationsCon
 
       console.log('Received recommendations', data);
 
-      const convertedData = covertResponse(data);
+      const convertedData = convertResponse(data);
 
       console.log('Converted recommendations', convertedData);
 
